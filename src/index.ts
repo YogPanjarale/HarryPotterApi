@@ -1,7 +1,7 @@
 import dotenv from 'dotenv';
 dotenv.config()
 import express from 'express'
-import { addOrUpdateCharacter, getCharacterById, getCharacters } from './dynamo';
+import { addOrUpdateCharacter, deleteCharacterById, getCharacterById, getCharacters } from './dynamo';
 
 const app = express()
 
@@ -23,6 +23,16 @@ app.get('/characters/:id',async(req,res)=>{
     const id =req.params.id
     try{
         const character = await getCharacterById(id)
+        res.json(character)
+    }catch(error){
+        console.error(error);
+        res.status(500).json({"error":"Some thing went wrong :("})
+    }
+})
+app.delete('/characters/:id',async(req,res)=>{
+    const id =req.params.id
+    try{
+        const character = await deleteCharacterById(id)
         res.json(character)
     }catch(error){
         console.error(error);
